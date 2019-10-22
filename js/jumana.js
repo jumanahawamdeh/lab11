@@ -1,11 +1,11 @@
 'use strict';
 function Product(title, src) {
-    this.title = title;
-    this.src = src;
-    this.clickCtr = 0;
-    this.shownCtr = 0;
-    Product.all.push(this);
-  }
+  this.title = title;
+  this.src = src;
+  this.clickCtr = 0;
+  this.shownCtr = 0;
+  Product.all.push(this);
+}
 Product.roundCtr = 0;
 Product.roundLimit = 25;
 Product.all = [];
@@ -42,112 +42,186 @@ new Product('water-can', 'img/water-can.jpg');
 new Product('win-glass', 'img/wine-glass.jpg');
 function renderNewProduct() {
 
-    var forbidden = [Product.leftObject , Product.centerObject ,Product.rightObject ];
-  
-    do {
-  
-        Product.leftObject = jumana();
-  
-    } while (forbidden.includes(Product.leftObject))
-  
-    forbidden.push(Product.leftObject);
-  
-    do {
-  
-        Product.centerObject = jumana();
-  
-    } while(forbidden.includes( Product.centerObject));
-    forbidden.push(Product.centerObject);
-  
-    do {
-  
-        Product.rightObject = jumana();
-  
-    } while(forbidden.includes( Product.rightObject ));
-    
-    
-    Product.leftObject.shownCtr++;
-    Product.centerObject.shownCtr++;
-    Product.rightObject.shownCtr++;
+  var forbidden = [Product.leftObject, Product.centerObject, Product.rightObject];
 
-  
-    var leftProductImageElement = Product.leftImage;
-    var centerProductImageElement = Product.centerImage;
-    var rightProductImageElement = Product.rightImage;
-  
-    leftProductImageElement.setAttribute('src', Product.leftObject.src);
-    leftProductImageElement.setAttribute('alt', Product.leftObject.title);
-    centerProductImageElement.setAttribute('src', Product.centerObject.src);
-    centerProductImageElement.setAttribute('alt', Product.centerObject.title);
-    rightProductImageElement .setAttribute('src', Product.rightObject.src);
-    rightProductImageElement .setAttribute('alt', Product.rightObject.title);
-  
-    Product.leftTitle.textContent = Product.leftObject.title;
-    Product.centerTitle.textContent = Product.centerObject.title;
-    Product.rightTitle.textContent = Product.rightObject.title;
+  do {
+
+    Product.leftObject = jumana();
+
+  } while (forbidden.includes(Product.leftObject))
+
+  forbidden.push(Product.leftObject);
+
+  do {
+
+    Product.centerObject = jumana();
+
+  } while (forbidden.includes(Product.centerObject));
+  forbidden.push(Product.centerObject);
+
+  do {
+
+    Product.rightObject = jumana();
+
+  } while (forbidden.includes(Product.rightObject));
+
+
+  Product.leftObject.shownCtr++;
+  Product.centerObject.shownCtr++;
+  Product.rightObject.shownCtr++;
+
+
+  var leftProductImageElement = Product.leftImage;
+  var centerProductImageElement = Product.centerImage;
+  var rightProductImageElement = Product.rightImage;
+
+  leftProductImageElement.setAttribute('src', Product.leftObject.src);
+  leftProductImageElement.setAttribute('alt', Product.leftObject.title);
+  centerProductImageElement.setAttribute('src', Product.centerObject.src);
+  centerProductImageElement.setAttribute('alt', Product.centerObject.title);
+  rightProductImageElement.setAttribute('src', Product.rightObject.src);
+  rightProductImageElement.setAttribute('alt', Product.rightObject.title);
+
+  Product.leftTitle.textContent = Product.leftObject.title;
+  Product.centerTitle.textContent = Product.centerObject.title;
+  Product.rightTitle.textContent = Product.rightObject.title;
+}
+
+
+function jumana() {
+  var index = Math.floor(Math.random() * Product.all.length);
+  return Product.all[index];
+}
+
+function updateTotals() {
+
+  var body = document.getElementById('report');
+
+  body.innerHTML = '';
+  for (var jum = 0; jum < Product.all.length; jum++) {
+    var product = Product.all[jum];
+    var section = addElement('section', body);
+    addElement('p', section, product.title + ' had ' + product.clickCtr + ' votes and was shown ' + product.shownCtr + ' times.');
+
+  }
+}
+function addElement(tag, container, text) {
+  var element = document.createElement(tag);
+  container.appendChild(element);
+  if (text) {
+    element.textContent = text;
+  }
+  return element;
+}
+function clickHandler(event) {
+
+  var clickedId = event.target.id;
+  var productClicked;
+
+  if (clickedId === 'left-img') {
+    productClicked = Product.leftObject;
+  } else if (clickedId === 'center-img') {
+    productClicked = Product.centerObject;
+  } else if (clickedId === 'right-img') {
+    productClicked = Product.rightObject;
+  } else {
+    console.log('Um, what was clicked on???', clickedId);
   }
 
+  if (productClicked) {
+    productClicked.clickCtr++;
+    Product.roundCtr++;
 
-  function jumana() {
-    var index = Math.floor(Math.random() * Product.all.length);
-    return Product.all[index];
-  }
+    updateTotals();
 
-  function updateTotals() {
+    if (Product.roundCtr === Product.roundLimit) {
 
-    var body= document.getElementById('report');
+      alert(' thank for you ,No more clicking for you!');
 
-    body.innerHTML = '';
-    for (var jum = 0; jum < Product.all.length; jum++) {
-      var product = Product.all[jum];
-      var section = addElement('section', body);
-      addElement('p', section, product.title+' had '+ product.clickCtr+' votes and was shown '+ product.shownCtr+' times.');
-   
+      Product.container.removeEventListener('click', clickHandler);
+      renderChart();
+
+      renderChart2();
+
+    } else {
+
+      renderNewProduct();
     }
   }
-  function addElement(tag, container, text) {
-    var element = document.createElement(tag);
-    container.appendChild(element);
-    if(text) {
-      element.textContent = text;
-    }
-    return element;
-  }
-  function clickHandler(event) {
+}
+Product.container.addEventListener('click', clickHandler);
 
-    var clickedId = event.target.id;
-    var productClicked;
-  
-    if(clickedId === 'left-img') {
-      productClicked = Product.leftObject;
-    } else if (clickedId === 'center-img') {
-      productClicked = Product.centerObject;
-    }else if (clickedId === 'right-img') {
-        productClicked = Product.rightObject;
-      }else {
-      console.log(' , what was clicked on???', clickedId);
-    }
-  
-    if(productClicked) {
-      productClicked.clickCtr++;
-      Product.roundCtr++;
-  
-      updateTotals();
-  
-      if(Product.roundCtr === Product.roundLimit) {
-  
-        alert('thank for you  No more clicking for you!');
-  
-        Product.container.removeEventListener('click', clickHandler);
-  
-      } else {
-  
-        renderNewProduct();
-      }
-    }
-  }
-  Product.container.addEventListener('click', clickHandler);
+updateTotals();
 
-  updateTotals();
-  
-  renderNewProduct();
+renderNewProduct();
+
+function getProductTitles() {
+
+  var productTitles = [];
+
+  for (var jum = 0; jum < Product.all.length; jum++) {
+    var productInstance = Product.all[jum];
+    productTitles.push(productInstance.title + ' clicked');
+
+  }
+  return productTitles;
+}
+function getClickedScore() {
+
+  var ClickedScore = [];
+
+  for (var jum = 0; jum < 20; jum ++) {
+    var ClickedInstance = Product.all[jum];
+    ClickedScore.push(ClickedInstance.clickCtr);
+
+  }
+  return ClickedScore;
+}
+
+function renderChart() {
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  var chart = new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+      labels: getProductTitles(),
+
+      datasets: [
+        {
+          label: 'Products',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: getClickedScore(),
+        }
+      ]
+    },
+    options: {}
+  })
+}
+
+
+function getProductTitles2() {
+
+  var productTitles = [];
+
+  for (var jum = 0; jum < Product.all.length; jum ++) {
+    var productInstance = Product.all[i];
+    productTitles.push(productInstance.title + ' shown');
+
+  }
+  return productTitles;
+}
+function getshownnumber() {
+
+  var shownScore = [];
+
+  for (var jum = 0; jum  < Product.all.length; jum ++) {
+    var shownInstance = Product.all[i];
+    shownScore.push(shownInstance.shownCtr);
+
+  }
+  return shownScore;
+}

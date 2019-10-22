@@ -125,7 +125,7 @@ function renderNewProduct() {
     }else if (clickedId === 'right-img') {
         productClicked = Product.rightObject;
       }else {
-      console.log('thank for you , what was clicked on???', clickedId);
+      console.log(' , what was clicked on???', clickedId);
     }
   
     if(productClicked) {
@@ -136,7 +136,7 @@ function renderNewProduct() {
   
       if(Product.roundCtr === Product.roundLimit) {
   
-        alert('No more clicking for you!');
+        alert('thank for you  No more clicking for you!');
   
         Product.container.removeEventListener('click', clickHandler);
   

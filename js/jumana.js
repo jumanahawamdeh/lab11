@@ -1,3 +1,4 @@
+
 'use strict';
 function Product(title, src) {
   this.title = title;
@@ -98,7 +99,7 @@ function updateTotals() {
   var body = document.getElementById('report');
 
   body.innerHTML = '';
-  for (var jum = 0; jum < Product.all.length; jum++) {
+  for (var jum  = 0; jum < Product.all.length; jum++) {
     var product = Product.all[jum];
     var section = addElement('section', body);
     addElement('p', section, product.title + ' had ' + product.clickCtr + ' votes and was shown ' + product.shownCtr + ' times.');
@@ -125,20 +126,21 @@ function clickHandler(event) {
   } else if (clickedId === 'right-img') {
     productClicked = Product.rightObject;
   } else {
-    console.log('Um, what was clicked on???', clickedId);
   }
 
   if (productClicked) {
     productClicked.clickCtr++;
     Product.roundCtr++;
 
-    updateTotals();
 
     if (Product.roundCtr === Product.roundLimit) {
 
-      alert(' thank for you ,No more clicking for you!');
+      alert(' thank for you, No more clicking for you!');
 
       Product.container.removeEventListener('click', clickHandler);
+      updateclicked();
+      updateTotals();
+
       renderChart();
 
       renderChart2();
@@ -151,7 +153,7 @@ function clickHandler(event) {
 }
 Product.container.addEventListener('click', clickHandler);
 
-updateTotals();
+// updateTotals();
 
 renderNewProduct();
 
@@ -170,7 +172,7 @@ function getClickedScore() {
 
   var ClickedScore = [];
 
-  for (var jum = 0; jum < 20; jum++) {
+  for (var  jum = 0; jum  < 20; jum++) {
     var ClickedInstance = Product.all[jum];
     ClickedScore.push(ClickedInstance.clickCtr);
 
@@ -192,8 +194,7 @@ function renderChart() {
       datasets: [
         {
           label: 'Products',
-          
-          backgroundColor: [
+                   backgroundColor: [
             'rgba(255, 99, 132, 0.4)',
             'rgba(54, 162, 235, 0.4)',
             'rgba(255, 206, 86, 0.4)',
@@ -244,15 +245,6 @@ function renderChart() {
     options: {}
   })
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -345,3 +337,38 @@ function renderChart2() {
     options: {}
   })
 }
+
+
+
+
+function updateclicked(){
+  var datastring=JSON.stringify( Product.all);
+  localStorage.setItem('reports',datastring);
+  console.log('datastring' , datastring);
+}
+function getClicked(){
+  var data =localStorage.getItem('reports');
+  console.log('data' , data);
+
+  var dataoriginal=JSON.parse(data);
+  console.log('dataoriginal' , dataoriginal);
+
+  if(dataoriginal){
+    for (var jum =0;jum <dataoriginal.length;jum ++){
+      var rawObject = dataoriginal[jum];
+      var currentProduct =Product.all[jum ];
+      currentProduct.clickCtr=rawObject.clickCtr;
+      currentProduct.shownCtr=rawObject.shownCtr; 
+    }
+
+    console.log('rawobject', dataoriginal[0].clickCtr);
+    console.log('product', Product.all[0].clickCtr);
+
+    renderNewProduct();  
+  }
+  }
+  
+  renderNewProduct();
+
+  getClicked();
+  // updateTotals();

@@ -136,7 +136,7 @@ function clickHandler(event) {
 
     if (Product.roundCtr === Product.roundLimit) {
 
-      alert(' thank for you ,No more clicking for you!');
+      alert(' thank for you,No more clicking for you!');
 
       Product.container.removeEventListener('click', clickHandler);
       renderChart();

@@ -153,7 +153,6 @@ function clickHandler(event) {
 }
 Product.container.addEventListener('click', clickHandler);
 
-// updateTotals();
 
 renderNewProduct();
 
@@ -371,4 +370,4 @@ function getClicked(){
   renderNewProduct();
 
   getClicked();
-  // updateTotals();
+ 
